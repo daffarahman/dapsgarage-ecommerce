@@ -64,47 +64,69 @@ export default function ProductList() {
             </h1>
 
             {/* Product Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {products.map((product) => (
-                    <div
-                        key={product.id}
-                        className="cursor-pointer bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-                    >
-                        {/* Image Container */}
-                        <div className="relative aspect-square bg-slate-100">
-                            <img
-                                src={product.image_url || 'https://via.placeholder.com/300'}
-                                alt={product.title}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                {products.map((product) => {
+                    const isOutOfStock = product.stock <= 0;
 
-                        {/* Content */}
-                        <div className="p-4">
-                            {/* Title - 2 lines max */}
-                            <h3 className="font-semibold text-base mb-3 line-clamp-2 text-[#b45309] min-h-[3rem]">
-                                {product.title || product.name}
-                            </h3>
+                    return (
+                        <div
+                            key={product.id}
+                            className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-300 bg-white hover:shadow-lg ${isOutOfStock
+                                    ? "border-slate-200"
+                                    : "border-yellow-500"
+                                }`}
+                        >
+                            {/* Image Container */}
+                            <div className="relative aspect-square bg-slate-100 mt-4 overflow-hidden">
+                                <img
+                                    src={product.image_url || 'https://via.placeholder.com/300'}
+                                    alt={product.title}
+                                    className={`w-full h-full object-cover transition-all duration-500 ${isOutOfStock ? "grayscale opacity-60" : "hover:scale-110"
+                                        }`}
+                                />
 
-                            {/* Price */}
-                            <div className="mb-2">
-                                {product.original_price ? (
-                                    <p className="text-sm">
-                                        From: <span className="line-through text-slate-500">{formatPrice(product.original_price)}</span>{' '}
-                                        <span className="font-bold text-lg text-green-600">{formatPrice(product.price)}</span>
-                                    </p>
-                                ) : (
-                                    <p className="font-bold text-xl text-[#f59e0b]">
-                                        {formatPrice(product.price)}
-                                    </p>
+                                {isOutOfStock && (
+                                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                                        <span className="bg-red-600 text-white text-[10px] md:text-xs font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-xl border border-white/20 transform -rotate-12">
+                                            Sold Out
+                                        </span>
+                                    </div>
                                 )}
                             </div>
 
-                            {/* Star Rating */}
-                            <StarRating rating={product.rating || 5} reviews={0} />
+                            {/* Content */}
+                            <div className="p-4">
+                                <h3 className={`font-semibold text-base mb-3 line-clamp-2 min-h-[3rem] transition-colors ${isOutOfStock ? "text-slate-400" : "text-[#b45309]"
+                                    }`}>
+                                    {product.title || product.name}
+                                </h3>
+
+                                {/* Price */}
+                                <div className="mb-2">
+                                    {isOutOfStock ? (
+                                        <p className="font-bold text-lg text-slate-400 italic">
+                                            Out of stock
+                                        </p>
+                                    ) : product.original_price ? (
+                                        <p className="text-sm">
+                                            From: <span className="line-through text-slate-500">{formatPrice(product.original_price)}</span>{' '}
+                                            <span className="font-bold text-lg text-green-600">{formatPrice(product.price)}</span>
+                                        </p>
+                                    ) : (
+                                        <p className="font-bold text-xl text-[#f59e0b]">
+                                            {formatPrice(product.price)}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Star Rating */}
+                                <div className={isOutOfStock ? "opacity-40" : ""}>
+                                    <StarRating rating={product.rating || 5} reviews={0} />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

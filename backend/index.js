@@ -70,25 +70,6 @@ app.get("/api/products", async (req, res) => {
     }
 });
 
-app.get("/api/products/:id", async (req, res) => {
-    const { id } = req.params;
-    try {
-        const { data, error } = await supabase.from("products").select("*").eq("id", id).single();
-
-        if (error) {
-            if (error.code === "PGRST116") {
-                return res.status(404).json({ error: "Product not found" });
-            }
-            throw error;
-        }
-
-        res.json(data);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
-
 app.listen(process.env.PORT, () => {
     console.log(`Server running on port ${process.env.PORT}`);
 });

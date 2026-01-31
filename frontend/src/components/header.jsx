@@ -117,9 +117,8 @@ export default function Header() {
                 </div>
             </div>
 
-            {/* 3. Desktop Manufacturer Navigation */}
             <nav className="hidden lg:block bg-[#f59e0b] text-slate-900 border-y border-black/10 shadow-inner">
-                <div className="flex max-w-7xl mx-auto h-12 justify-center">
+                <div className="flex max-w-7xl mx-auto h-12 justify-start px-4">
                     {Object.keys(grouped).map((m) => (
                         <div
                             key={m}
