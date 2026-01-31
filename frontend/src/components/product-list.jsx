@@ -8,6 +8,14 @@ export default function ProductList() {
 
     const { slug } = useParams();
 
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+        }).format(price).replace('Rp', 'Rp ');
+    };
+
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -49,10 +57,10 @@ export default function ProductList() {
     }
 
     return (
-        <div className="mx-auto px-6 py-10">
+        <div className="mx-auto max-w-7xl px-6 py-10">
             {/* Header */}
-            <h1 className="text-3xl font-black uppercase mb-8 text-[#003c96]">
-                {slug} Games ({products.length})
+            <h1 className="text-3xl font-black uppercase mb-8 text-[#f59e0b]">
+                {slug} Catalogue
             </h1>
 
             {/* Product Grid */}
@@ -74,7 +82,7 @@ export default function ProductList() {
                         {/* Content */}
                         <div className="p-4">
                             {/* Title - 2 lines max */}
-                            <h3 className="font-semibold text-base mb-3 line-clamp-2 text-[#003c96] min-h-[3rem]">
+                            <h3 className="font-semibold text-base mb-3 line-clamp-2 text-[#b45309] min-h-[3rem]">
                                 {product.title || product.name}
                             </h3>
 
@@ -82,12 +90,12 @@ export default function ProductList() {
                             <div className="mb-2">
                                 {product.original_price ? (
                                     <p className="text-sm">
-                                        From: <span className="line-through text-slate-500">${product.original_price}</span>{' '}
-                                        <span className="font-bold text-lg text-green-600">${product.price}</span>
+                                        From: <span className="line-through text-slate-500">{formatPrice(product.original_price)}</span>{' '}
+                                        <span className="font-bold text-lg text-green-600">{formatPrice(product.price)}</span>
                                     </p>
                                 ) : (
-                                    <p className="font-bold text-xl text-[#003c96]">
-                                        ${product.price}
+                                    <p className="font-bold text-xl text-[#f59e0b]">
+                                        {formatPrice(product.price)}
                                     </p>
                                 )}
                             </div>

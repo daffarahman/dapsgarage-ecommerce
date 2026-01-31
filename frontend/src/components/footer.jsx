@@ -2,10 +2,10 @@ import { Facebook, Twitter, Youtube, Instagram } from "lucide-react";
 
 export default function Footer() {
     return (
-        <footer className="bg-[#1a5fb4] py-16 px-6 md:px-20 border-t border-blue-400 text-white mt-12">
+        <footer className="bg-[#f59e0b] py-16 px-6 md:px-20 border-t border-amber-600 text-slate-900 mt-12">
             <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
                 <div>
-                    <h4 className="font-bold text-xl uppercase mb-4 underline decoration-yellow-400 underline-offset-8 decoration-4">DK Store</h4>
+                    <h4 className="font-bold text-xl uppercase mb-4 underline decoration-slate-900 underline-offset-8 decoration-4">Dap's Garage</h4>
                     <ul className="space-y-2 text-sm">
                         <li>About Us</li>
                         <li>Sell Video Games</li>
@@ -16,7 +16,7 @@ export default function Footer() {
                     </ul>
                 </div>
                 <div>
-                    <h4 className="font-bold text-xl uppercase mb-4 underline decoration-yellow-400 underline-offset-8 decoration-4">Company</h4>
+                    <h4 className="font-bold text-xl uppercase mb-4 underline decoration-slate-900 underline-offset-8 decoration-4">Company</h4>
                     <ul className="space-y-2 text-sm">
                         <li>Contact Us</li>
                         <li>Shipping & Returns</li>
@@ -26,7 +26,7 @@ export default function Footer() {
                     </ul>
                 </div>
                 <div>
-                    <h4 className="font-bold text-xl uppercase mb-4 underline decoration-yellow-400 underline-offset-8 decoration-4">Account</h4>
+                    <h4 className="font-bold text-xl uppercase mb-4 underline decoration-slate-900 underline-offset-8 decoration-4">Account</h4>
                     <ul className="space-y-2 text-sm">
                         <li>Track My Order</li>
                         <li>My Account</li>
@@ -37,15 +37,15 @@ export default function Footer() {
                     </ul>
                 </div>
                 <div>
-                    <h4 className="font-bold text-xl uppercase mb-4 underline decoration-yellow-400 underline-offset-8 decoration-4">Get Social</h4>
+                    <h4 className="font-bold text-xl uppercase mb-4 underline decoration-slate-900 underline-offset-8 decoration-4">Get Social</h4>
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-blue-600 p-2 rounded cursor-pointer"><Facebook size={20} /> Facebook</div>
-                        <div className="bg-blue-400 p-2 rounded cursor-pointer"><Twitter size={20} /> Twitter</div>
-                        <div className="bg-red-600 p-2 rounded cursor-pointer"><Youtube size={20} /> Youtube</div>
-                        <div className="bg-pink-600 p-2 rounded cursor-pointer"><Instagram size={20} /> Instagram</div>
+                        <div className="bg-slate-800 p-2 rounded cursor-pointer hover:bg-slate-700 transition-colors flex items-center gap-2"><Facebook size={20} /> Facebook</div>
+                        <div className="bg-slate-800 p-2 rounded cursor-pointer hover:bg-slate-700 transition-colors flex items-center gap-2"><Twitter size={20} /> Twitter</div>
+                        <div className="bg-slate-800 p-2 rounded cursor-pointer hover:bg-slate-700 transition-colors flex items-center gap-2"><Youtube size={20} /> Youtube</div>
+                        <div className="bg-slate-800 p-2 rounded cursor-pointer hover:bg-slate-700 transition-colors flex items-center gap-2"><Instagram size={20} /> Instagram</div>
                     </div>
-                    <div className="mt-6 text-xs text-blue-200">
-                        <p>DKOldies.com</p>
+                    <div className="mt-6 text-xs text-amber-950/70">
+                        <p>dapsgarage.com</p>
                         <p>2846 Main St #5A</p>
                         <p>Morgantown, PA 19543 USA</p>
                     </div>

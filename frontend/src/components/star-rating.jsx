@@ -9,7 +9,7 @@ export default function StarRating({ rating = 5, reviews = 0 }) {
                     </span>
                 ))}
             </div>
-            <span className="text-sm text-blue-600 font-semibold">
+            <span className="text-sm text-orange-600 font-semibold">
                 {reviews} reviews
             </span>
         </div>
