@@ -62,4 +62,12 @@ export const cartService = {
         const res = await api.get("/profile/cart");
         return res.data;
     },
+    addToCart: async (product_id, profile_id, quantity) => {
+        const res = await api.post("/profile/cart", {
+            product_id,
+            profile_id,
+            quantity,
+        });
+        return res.data;
+    },
 }

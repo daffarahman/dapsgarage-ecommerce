@@ -188,23 +188,61 @@ app.get("/api/products/:id", async (req, res) => {
     }
 })
 
-app.post("/api/profile/cart", authenticateToken, (req, res) => {
-    res.json({
-        message: "Cart fetched successfully",
-        data: req.user
-    })
-    // try {
-    //     const { data, error } = await supabase.from("cart").select("*").eq("user_id", req.user.id);
+app.get("/api/profile/cart", authenticateToken, async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from("cart")
+            // lu jangan lupa join yak dari materi basdat wkwkkwkw
+            .select(`
+                *,
+                product:product_id (
+                    title,
+                    price,
+                    image_url,
+                    stock,
+                    discount,
+                    platform:platform_id (
+                        id,
+                        name,
+                        slug
+                    )
+                )
+            `)
+            .eq("profile_id", req.user.id)
+            .order("created_at")
 
-    //     if (error) {
-    //         throw error;
-    //     }
+        if (error) {
+            throw error;
+        }
 
-    //     res.json(data);
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(500).json({ error: "Internal server error" });
-    // }
+        res.json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.post("/api/profile/cart", authenticateToken, async (req, res) => {
+    try {
+        const { product_id, profile_id, quantity } = req.body;
+
+        const { error } = await supabase.from("cart").insert({
+            product_id: product_id,
+            profile_id: profile_id,
+            quantity: quantity,
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        res.json({
+            message: "Item added to cart successfully!"
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 })
 
 app.listen(process.env.PORT, () => {
