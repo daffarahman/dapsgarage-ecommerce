@@ -64,7 +64,8 @@ app.get("/api/products", async (req, res) => {
             const { data, error } = await supabase
                 .from("products")
                 .select("*")
-                .eq("platform_id", platformData.id);
+                .eq("platform_id", platformData.id)
+                .order("stock", { ascending: false });
 
             if (error) {
                 throw error;
@@ -73,7 +74,10 @@ app.get("/api/products", async (req, res) => {
             return res.json(data);
         }
 
-        const { data, error } = await supabase.from("products").select("*");
+        const { data, error } = await supabase
+            .from("products")
+            .select("*")
+            .order("stock", { ascending: false });
 
         if (error) {
             throw error;
