@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { platformService } from "../services/api"
 import {
     Truck,
-    ShieldCheck,
     ShoppingCart,
     User,
     Menu,
@@ -15,8 +14,10 @@ import {
     LogIn
 } from "lucide-react"
 import { Link } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
 
 export default function Header() {
+    const { user } = useAuth()
     const [platforms, setPlatforms] = useState([])
     const [loading, setLoading] = useState(true)
     const [activeManufacturer, setActiveManufacturer] = useState(null)
@@ -47,74 +48,67 @@ export default function Header() {
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
-    if (loading) return <div className="bg-[#f59e0b] h-1 w-full animate-pulse"></div>
+    if (loading) return <div className="bg-slate-900 h-1 w-full animate-pulse"></div>
 
     return (
-        <header className="w-full shadow-lg font-sans">
-            {/* 1. Top Announcement Bar */}
-            <div className="bg-[#fbbf24] text-amber-950 text-[10px] md:text-[11px] font-bold py-1.5 px-4 border-b border-black/5 uppercase tracking-wider">
-                <div className="max-w-7xl mx-auto flex justify-between items-center text-center sm:text-left">
-                    <div className="flex items-center gap-2">
-                        <Truck size={14} className="text-orange-600" />
-                        <span>FREE SURAKARTA KOTA SHIPPING <span className="hidden sm:inline">with orders over Rp100.000*</span></span>
+        <header className="w-full font-sans border-b-4 border-slate-900">
+            <div className="bg-[#fbbf24] text-slate-900 text-[10px] md:text-[11px] font-black py-2 px-4 border-b-2 border-slate-900/10 uppercase tracking-widest">
+                <div className="max-w-7xl mx-auto flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <Truck size={14} strokeWidth={3} />
+                        <span>FREE SURAKARTA KOTA SHIPPING ON ORDERS OVER Rp100.000*</span>
                     </div>
-                    {/* <div className="flex items-center gap-2">
-                        <ShieldCheck size={14} className="text-orange-600" />
-                        <span>1 YEAR WARRANTY <span className="hidden sm:inline">that nobody can beat!</span></span>
-                    </div> */}
                 </div>
             </div>
 
-            {/* 2. Main Brand Header */}
-            <div className="bg-[#f59e0b] text-slate-900 py-3 md:py-4 px-4 md:px-6">
-                <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
-
-                    {/* Hamburger Menu (Mobile Only) */}
+            <div className="bg-[#f59e0b] text-slate-900 py-4 px-6">
+                <div className="max-w-7xl mx-auto flex justify-between items-center gap-8">
                     <button
                         onClick={toggleSidebar}
-                        className="lg:hidden p-2 -ml-2 hover:bg-black/10 rounded-md transition-colors"
+                        className="lg:hidden p-2 border-2 border-slate-900 hover:bg-slate-900 hover:text-[#f59e0b] transition-all"
                         aria-label="Toggle Menu"
                     >
-                        {isSidebarOpen ? <X size={26} /> : <Menu size={26} />}
+                        {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
 
-                    {/* Logo Area */}
-                    <Link to="/" className="flex flex-col items-center flex-1 lg:flex-none">
-                        <div className="text-2xl md:text-3xl font-black italic flex items-center gap-1.5 leading-none">
-                            <div className="bg-white text-[#f59e0b] px-1 rounded-sm">
+                    <Link to="/" className="flex flex-col items-center group">
+                        <div className="flex items-center gap-2">
+                            <div className="bg-slate-900 text-[#f59e0b] p-1.5 border-2 border-slate-900 group-hover:bg-red-600 group-hover:border-red-600 transition-colors">
                                 <Gamepad2 size={24} strokeWidth={3} />
                             </div>
-                            <span>DAPS</span>
-                            <span className="text-red-500">garage</span>
+                            <div className="flex flex-col leading-none">
+                                <div className="text-3xl font-black italic tracking-tighter flex items-center gap-1 uppercase">
+                                    <span>DAPS</span>
+                                    <span className="text-red-600 group-hover:text-slate-900 transition-colors">garage</span>
+                                </div>
+                                <span className="text-[10px] uppercase tracking-[0.3em] font-black opacity-80 mt-1">Garage Sales</span>
+                            </div>
                         </div>
-                        <span className="text-[9px] uppercase tracking-[0.2em] font-bold mt-1 opacity-70">Retro Game Store</span>
                     </Link>
 
-                    {/* Desktop Navigation (Center/Utilities) */}
-                    <div className="hidden lg:flex items-center gap-6 text-[13px] font-medium text-slate-800">
-                        <Link to="/contact" className="hover:text-black transition-colors flex items-center gap-1.5">
-                            <Mail size={14} /> Contact
+                    <div className="hidden lg:flex items-center gap-8 text-[12px] font-black uppercase tracking-widest">
+                        <Link to="/contact" className="hover:text-red-600 transition-colors flex items-center gap-2">
+                            <Mail size={16} strokeWidth={3} /> Contact
                         </Link>
-                        <Link to="/about" className="hover:text-black transition-colors flex items-center gap-1.5">
-                            <Info size={14} /> About Us
+                        <Link to="/about" className="hover:text-red-600 transition-colors flex items-center gap-2">
+                            <Info size={16} strokeWidth={3} /> About
                         </Link>
                     </div>
 
-                    {/* Desktop Right Utils */}
-                    <div className="flex items-center gap-3 md:gap-5 text-[13px] font-medium text-slate-800">
-                        <Link to="/account" className="hidden sm:flex items-center gap-1.5 hover:text-black transition-colors">
-                            <User size={16} /> Account
+                    <div className="flex items-center gap-4 text-[12px] font-black uppercase tracking-widest text-slate-900">
+                        <Link to="/profile" className="hidden sm:flex items-center gap-2 hover:text-red-600 transition-colors">
+                            <User size={18} strokeWidth={3} /> {user ? user.full_name : "Account"}
                         </Link>
-                        <Link to="/checkout" className="flex items-center gap-2 bg-slate-900 text-[#f59e0b] px-3 md:px-5 py-1.5 rounded font-black hover:bg-slate-800 transition-colors shadow-sm">
+                        <Link to="/checkout" className="flex items-center gap-3 bg-slate-900 text-[#f59e0b] px-6 py-2.5 border-2 border-slate-900 hover:bg-transparent hover:text-slate-900 transition-all font-black italic">
                             <span className="hidden sm:inline">Checkout</span>
-                            <ShoppingCart size={18} strokeWidth={2.5} />
+                            <ShoppingCart size={20} strokeWidth={3} />
                         </Link>
                     </div>
                 </div>
             </div>
 
-            <nav className="hidden lg:block bg-[#f59e0b] text-slate-900 border-y border-black/10 shadow-inner">
-                <div className="flex max-w-7xl mx-auto h-12 justify-start px-4">
+            <nav className="hidden lg:block bg-slate-900 text-[#f59e0b] border-t-2 border-slate-900">
+                <div className="flex max-w-7xl mx-auto h-14 justify-start">
                     {Object.keys(grouped).map((m) => (
                         <div
                             key={m}
@@ -122,24 +116,23 @@ export default function Header() {
                             onMouseEnter={() => setActiveManufacturer(m)}
                             onMouseLeave={() => setActiveManufacturer(null)}
                         >
-                            <button className={`px-8 h-full font-black text-xs tracking-widest uppercase transition-all flex items-center gap-1.5 ${activeManufacturer === m ? 'bg-slate-900 text-[#f59e0b]' : 'hover:bg-black/5'}`}>
+                            <button className={`px-10 h-full font-black text-xs tracking-[0.2em] uppercase transition-all flex items-center gap-2 border-r-2 border-white/5 ${activeManufacturer === m ? 'bg-red-600 text-slate-900' : 'hover:bg-white/10'}`}>
                                 {m}
-                                <ChevronDown size={14} className={`transition-transform duration-200 ${activeManufacturer === m ? 'rotate-180' : ''}`} />
+                                <ChevronDown size={14} strokeWidth={3} className={`transition-transform duration-200 ${activeManufacturer === m ? 'rotate-180' : ''}`} />
                             </button>
 
-                            {/* Dropdown Menu */}
                             {activeManufacturer === m && (
-                                <div className="absolute top-full left-0 w-64 bg-white text-slate-900 z-50 shadow-2xl border-x border-b border-slate-200 overflow-hidden rounded-b-xl">
-                                    <div className="bg-[#f59e0b] h-1 w-full"></div>
+                                <div className="absolute top-full left-0 w-72 bg-slate-900 border-2 border-slate-900 z-50">
+                                    <div className="bg-red-600 h-1 w-full"></div>
                                     <ul className="py-2">
                                         {grouped[m].map(p => (
                                             <li key={p.id}>
                                                 <Link
                                                     to={`/products/${p.slug}`}
-                                                    className="px-6 py-2.5 hover:bg-slate-50 hover:text-[#f59e0b] flex items-center justify-between group transition-colors"
+                                                    className="px-8 py-3.5 hover:bg-white/10 flex items-center justify-between group transition-colors"
                                                 >
-                                                    <span className="text-[14px] font-bold">{p.name}</span>
-                                                    <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                                                    <span className="text-[13px] font-black uppercase tracking-wider">{p.name}</span>
+                                                    <ChevronRight size={14} strokeWidth={3} className="opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
                                                 </Link>
                                             </li>
                                         ))}
@@ -151,54 +144,49 @@ export default function Header() {
                 </div>
             </nav>
 
-            {/* 4. Mobile Sidebar (Drawer) */}
             <div
                 className={`fixed inset-0 z-[100] transition-opacity duration-300 lg:hidden ${isSidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
             >
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={toggleSidebar}></div>
+                <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onClick={toggleSidebar}></div>
 
-                {/* Content */}
-                <div className={`absolute top-0 left-0 h-full w-[85%] sm:w-[350px] bg-white shadow-2xl transform transition-transform duration-300 ease-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                    <div className="flex flex-col h-full uppercase">
-                        {/* Sidebar Header */}
-                        <div className="bg-[#f59e0b] text-slate-900 p-6 flex justify-between items-center">
-                            <Link to="/" onClick={toggleSidebar} className="font-black italic text-xl flex items-center gap-2">
-                                <Gamepad2 />
-                                <span>DAPS</span><span className="text-red-500">garage</span>
+                <div className={`absolute top-0 left-0 h-full w-[85%] sm:w-[400px] bg-[#f59e0b] border-r-4 border-slate-900 transform transition-transform duration-300 ease-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                    <div className="flex flex-col h-full uppercase font-black">
+                        <div className="bg-slate-900 text-[#f59e0b] p-8 flex justify-between items-center">
+                            <Link to="/" onClick={toggleSidebar} className="italic text-2xl flex items-center gap-3">
+                                <Gamepad2 strokeWidth={3} />
+                                <span>DAPS</span><span className="text-red-600">garage</span>
                             </Link>
-                            <button onClick={toggleSidebar} className="p-1 hover:bg-white/10 rounded">
-                                <X size={24} />
+                            <button onClick={toggleSidebar} className="p-2 border-2 border-[#f59e0b] hover:bg-[#f59e0b] hover:text-slate-900 transition-colors">
+                                <X size={26} strokeWidth={3} />
                             </button>
                         </div>
 
-                        {/* Sidebar Menu */}
-                        <div className="flex-1 overflow-y-auto bg-slate-50">
+                        <div className="flex-1 overflow-y-auto">
                             {Object.keys(grouped).map((m) => (
-                                <div key={m} className="border-b border-slate-200 bg-white">
+                                <div key={m} className="border-b-2 border-slate-900">
                                     <button
                                         onClick={() => setExpandedManufacturer(expandedManufacturer === m ? null : m)}
-                                        className="w-full flex justify-between items-center p-5 font-black text-slate-800 hover:bg-slate-50 transition-colors"
+                                        className="w-full flex justify-between items-center p-6 text-slate-900 hover:bg-white/10 transition-colors tracking-widest"
                                     >
                                         <span>{m}</span>
                                         <ChevronDown
-                                            size={18}
+                                            size={20}
+                                            strokeWidth={3}
                                             className={`transition-transform duration-200 ${expandedManufacturer === m ? 'rotate-180' : ''}`}
                                         />
                                     </button>
 
-                                    {/* Accordion Content */}
-                                    <div className={`overflow-hidden transition-all duration-300 ${expandedManufacturer === m ? 'max-h-[500px]' : 'max-h-0'}`}>
-                                        <ul className="bg-slate-50 pb-2">
+                                    <div className={`overflow-hidden transition-all duration-300 ${expandedManufacturer === m ? 'max-h-[1000px]' : 'max-h-0'}`}>
+                                        <ul className="bg-slate-900/5 pb-4">
                                             {grouped[m].map(p => (
                                                 <li key={p.id}>
                                                     <Link
                                                         to={`/products/${p.slug}`}
                                                         onClick={toggleSidebar}
-                                                        className="flex items-center justify-between px-8 py-3 text-sm font-bold text-slate-600 hover:text-[#f59e0b] hover:bg-white transition-all"
+                                                        className="flex items-center justify-between px-10 py-4 text-sm font-black text-slate-700 hover:text-red-600 hover:bg-white/10 transition-all border-l-4 border-transparent hover:border-red-600"
                                                     >
                                                         {p.name}
-                                                        <ChevronRight size={14} />
+                                                        <ChevronRight size={14} strokeWidth={3} />
                                                     </Link>
                                                 </li>
                                             ))}
@@ -207,28 +195,26 @@ export default function Header() {
                                 </div>
                             ))}
 
-                            {/* Mobile Extra Links */}
-                            <div className="p-5 space-y-4 font-black">
-                                <Link to="/account" onClick={toggleSidebar} className="flex items-center gap-3 text-slate-800 hover:text-[#f59e0b]">
-                                    <User size={18} /> My Account
+                            <div className="p-8 space-y-6 font-black tracking-widest text-slate-900">
+                                <Link to="/profile" onClick={toggleSidebar} className="flex items-center gap-4 hover:text-red-600 transition-colors">
+                                    <User size={20} strokeWidth={3} /> My Account
                                 </Link>
-                                <Link to="/signin" onClick={toggleSidebar} className="flex items-center gap-3 text-slate-800 hover:text-[#f59e0b]">
-                                    <LogIn size={18} /> Sign In
+                                <Link to="/login" onClick={toggleSidebar} className="flex items-center gap-4 hover:text-red-600 transition-colors">
+                                    <LogIn size={20} strokeWidth={3} /> Sign In
                                 </Link>
-                                <div className="h-px bg-slate-200 my-2"></div>
-                                <Link to="/about" onClick={toggleSidebar} className="flex items-center gap-3 text-[12px] text-slate-500 hover:text-[#f59e0b]">
-                                    <Info size={16} /> About Us
+                                <div className="h-0.5 bg-slate-900/20"></div>
+                                <Link to="/about" onClick={toggleSidebar} className="flex items-center gap-4 text-xs font-bold hover:text-red-600 transition-colors">
+                                    <Info size={18} strokeWidth={3} /> About
                                 </Link>
-                                <Link to="/contact" onClick={toggleSidebar} className="flex items-center gap-3 text-[12px] text-slate-500 hover:text-[#f59e0b]">
-                                    <Mail size={16} /> Contact Support
+                                <Link to="/contact" onClick={toggleSidebar} className="flex items-center gap-4 text-xs font-bold hover:text-red-600 transition-colors">
+                                    <Mail size={18} strokeWidth={3} /> Contact Support
                                 </Link>
                             </div>
                         </div>
 
-                        {/* Sidebar Footer */}
-                        <div className="p-6 bg-white border-t border-slate-200">
-                            <Link to="/checkout" onClick={toggleSidebar} className="w-full flex justify-center items-center gap-3 bg-slate-900 text-[#f59e0b] py-4 rounded-xl font-black text-xl shadow-lg hover:bg-slate-800 transition-colors">
-                                CHECKOUT <ShoppingCart size={24} strokeWidth={2.5} />
+                        <div className="p-8 bg-slate-900 border-t-4 border-slate-900">
+                            <Link to="/checkout" onClick={toggleSidebar} className="w-full flex justify-center items-center gap-4 bg-red-600 text-slate-900 py-5 font-black text-xl italic hover:bg-[#f59e0b] transition-all border-2 border-red-600">
+                                CHECKOUT <ShoppingCart size={24} strokeWidth={3} />
                             </Link>
                         </div>
                     </div>

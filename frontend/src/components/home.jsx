@@ -7,7 +7,7 @@ export default function Home() {
             <section className="bg-white py-12 px-6 md:px-20 flex flex-col md:flex-row items-center gap-10">
                 <div className="flex-1 space-y-4">
                     <h1 className="text-4xl md:text-5xl font-black text-[#f59e0b] uppercase tracking-tighter" style={{ fontFamily: 'monospace' }}>
-                        DAP'S GARAGE RETRO GAME STORE
+                        DAP'S GARAGE SALES
                     </h1>
                     <p className="text-slate-600 text-lg max-w-2xl leading-relaxed">
                         Buy used video games, original game systems and old school gaming accessories at the largest family run retro video game online store. Shop all our vintage authentic products, with a <span className="underline font-bold">free 1 year warranty</span> and free domestic shipping on orders over $20!

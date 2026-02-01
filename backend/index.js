@@ -4,6 +4,7 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { createClient } from "@supabase/supabase-js";
+import { authenticateToken } from "./middleware.js";
 
 dotenv.config();
 
@@ -26,7 +27,7 @@ app.post("/api/auth/register", async (req, res) => {
 
         const { data, error } = await supabase.from("profiles").insert({
             email: email,
-            password: hashedPassword,
+            password_hash: hashedPassword,
             full_name: full_name,
         });
 
@@ -34,11 +35,63 @@ app.post("/api/auth/register", async (req, res) => {
             throw error;
         }
 
-        res.json(data);
+        res.json({
+            message: "User registered successfully"
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        if (error.code === "23505") {
+            error.message = "Email already exists";
+        }
+        res.status(500).json(error);
     }
+});
+
+app.post("/api/auth/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Search user
+        const { data, error } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("email", email)
+            .single();
+
+
+        // Check password
+        if (!data || !data.password_hash) {
+            throw {
+                message: "Email did NOT found!"
+            };
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, data.password_hash);
+
+        if (!isPasswordValid) {
+            throw {
+                message: "Invalid password!"
+            };
+        }
+
+        const token = jwt.sign(
+            { id: data.id, email: data.email, full_name: data.full_name },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" }
+        );
+
+        res.json({
+            message: "Login success!",
+            user: data,
+            token,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+});
+
+app.get("/api/auth/me", authenticateToken, (req, res) => {
+    res.json(req.user);
 });
 
 /* API FOR DATA */
@@ -133,6 +186,25 @@ app.get("/api/products/:id", async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Internal server error" });
     }
+})
+
+app.post("/api/profile/cart", authenticateToken, (req, res) => {
+    res.json({
+        message: "Cart fetched successfully",
+        data: req.user
+    })
+    // try {
+    //     const { data, error } = await supabase.from("cart").select("*").eq("user_id", req.user.id);
+
+    //     if (error) {
+    //         throw error;
+    //     }
+
+    //     res.json(data);
+    // } catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ error: "Internal server error" });
+    // }
 })
 
 app.listen(process.env.PORT, () => {
