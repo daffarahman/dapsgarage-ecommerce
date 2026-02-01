@@ -1,18 +1,47 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import { createClient } from "@supabase/supabase-js";
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
+app.use(express.json());
+
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to DapsGarage E-Commerce API" });
 });
 
+/* AUTH */
+app.post("/api/auth/register", async (req, res) => {
+    try {
+        const { email, password, full_name } = req.body;
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const { data, error } = await supabase.from("profiles").insert({
+            email: email,
+            password: hashedPassword,
+            full_name: full_name,
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        res.json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+/* API FOR DATA */
 app.get("/api/platforms", async (req, res) => {
     try {
         const { data, error } = await supabase.from("platforms").select("*");
