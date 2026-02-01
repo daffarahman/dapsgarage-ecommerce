@@ -209,7 +209,7 @@ app.get("/api/profile/cart", authenticateToken, async (req, res) => {
                 )
             `)
             .eq("profile_id", req.user.id)
-            .order("created_at")
+            .order("created_at", { ascending: false })
 
         if (error) {
             throw error;
