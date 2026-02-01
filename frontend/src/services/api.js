@@ -70,4 +70,8 @@ export const cartService = {
         });
         return res.data;
     },
+    deleteCartItem: async (id) => {
+        const res = await api.delete(`/profile/cart/${id}`);
+        return res.data;
+    },
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom"
-import { productService, platformService } from "../services/api";
+import { Link, useParams, useNavigate } from "react-router-dom"
+import { productService, platformService, cartService } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 import Loading from "./loading";
 import StarRating from "./star-rating";
 import { Info, ChevronDown, ChevronUp, Heart, ShoppingCart, Tag } from "lucide-react";
@@ -8,12 +9,16 @@ import { Info, ChevronDown, ChevronUp, Heart, ShoppingCart, Tag } from "lucide-r
 export default function ProductPage() {
 
     const { id } = useParams();
+    const navigate = useNavigate();
+    const { user, isAuthenticated } = useAuth();
 
     const [product, setProduct] = useState(null);
     const [platform, setPlatform] = useState(null);
 
     const [loading, setLoading] = useState(true);
+    const [adding, setAdding] = useState(false);
     const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState("");
 
     const [quantity, setQuantity] = useState(1);
 
@@ -37,11 +42,34 @@ export default function ProductPage() {
         fetchProduct();
     }, [id])
 
+    const handleAddToCart = async () => {
+        if (!isAuthenticated) {
+            navigate("/login");
+            return;
+        }
+
+        try {
+            setAdding(true);
+            setError(null);
+            setSuccessMessage("");
+
+            await cartService.addToCart(product.id, user.id, quantity);
+
+            setSuccessMessage("Added to cart!");
+            setTimeout(() => setSuccessMessage(""), 3000);
+        } catch (err) {
+            console.error(err);
+            setError("Failed to add to cart. Please try again.");
+        } finally {
+            setAdding(false);
+        }
+    };
+
     if (loading) {
         return <Loading />;
     }
 
-    if (error || !product) {
+    if (error && !product) {
         return <div className="p-10 text-center text-red-500">Error loading product.</div>;
     }
 
@@ -170,20 +198,25 @@ export default function ProductPage() {
                     <div className="flex flex-col gap-3 mt-8">
                         <div className="flex gap-4">
                             <button
-                                disabled={isOutOfStock}
-                                className={`flex-1 font-bold py-3 px-6 rounded shadow-sm transition-colors uppercase ${isOutOfStock
+                                onClick={handleAddToCart}
+                                disabled={isOutOfStock || adding}
+                                className={`flex-1 font-bold py-3 px-6 rounded shadow-sm transition-colors uppercase ${isOutOfStock || adding
                                     ? "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none"
                                     : "bg-[#FECD32] hover:bg-[#ebbb2e] text-[#0050A1]"
                                     }`}
                             >
-                                {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+                                {isOutOfStock ? "Out of Stock" : adding ? "Adding..." : "Add to Cart"}
                             </button>
                             <button className="flex-1 border-2 border-[#00A3E0] text-[#00A3E0] hover:bg-blue-50 font-semibold py-3 px-6 rounded flex items-center justify-center gap-2 transition-colors">
                                 Add to Wish List
                                 <ChevronDown className="w-4 h-4" />
                             </button>
                         </div>
-
+                        {error && <p className="text-red-500 text-sm font-medium mt-2">{error}</p>}
+                        {successMessage && <p className="text-green-600 text-sm font-bold mt-2 flex items-center gap-2">
+                            <ShoppingCart className="w-4 h-4" />
+                            {successMessage}
+                        </p>}
                     </div>
                 </div>
             </div>

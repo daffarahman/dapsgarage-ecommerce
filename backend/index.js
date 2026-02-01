@@ -245,6 +245,24 @@ app.post("/api/profile/cart", authenticateToken, async (req, res) => {
     }
 })
 
+app.delete("/api/profile/cart/:id", authenticateToken, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = await supabase.from("cart").delete().eq("id", id);
+
+        if (error) {
+            throw error;
+        }
+
+        res.json({
+            message: "Item deleted from cart successfully!"
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
 app.listen(process.env.PORT, () => {
     console.log(`Server running on port ${process.env.PORT}`);
 });
