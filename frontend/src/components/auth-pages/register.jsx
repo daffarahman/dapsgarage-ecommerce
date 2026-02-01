@@ -42,20 +42,12 @@ export default function Register() {
 
     return (
         <div className="min-h-[80vh] flex flex-col items-center justify-center p-6 bg-slate-50 font-sans">
-            <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+            <div className="w-full max-w-md bg-white rounded-3xl border border-slate-100 overflow-hidden">
                 {/* Header/Logo */}
                 <div className="bg-[#f59e0b] p-8 text-center">
-                    <div className="flex justify-center mb-4">
-                        <div className="bg-white text-[#f59e0b] p-3 rounded-2xl shadow-lg transform rotate-6 scale-110">
-                            <Gamepad2 size={40} strokeWidth={2.5} />
-                        </div>
-                    </div>
                     <h1 className="text-3xl font-black text-slate-900 italic tracking-tight flex items-center justify-center gap-1.5 leading-none">
-                        DAPS <span className="text-red-600">garage</span>
+                        Become a member!
                     </h1>
-                    <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-800 mt-2 opacity-80">
-                        Create Your Member Account
-                    </p>
                 </div>
 
                 {/* Form Section */}
@@ -133,7 +125,7 @@ export default function Register() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full bg-slate-900 text-[#f59e0b] py-4 rounded-xl font-black text-lg shadow-xl hover:bg-slate-800 active:scale-[0.98] transition-all flex items-center justify-center gap-3 mt-8 uppercase tracking-widest disabled:bg-slate-300 disabled:text-slate-500"
+                                className="w-full bg-slate-900 text-[#f59e0b] py-4 rounded-xl font-black text-lg hover:bg-slate-800 active:scale-[0.98] transition-all flex items-center justify-center gap-3 mt-8 uppercase tracking-widest disabled:bg-slate-300 disabled:text-slate-500"
                             >
                                 {loading ? (
                                     <>
@@ -148,7 +140,7 @@ export default function Register() {
                                 )}
                             </button>
 
-                            <p className="text-center text-sm font-bold text-slate-500 mt-6 uppercase tracking-tight">
+                            <p className="text-center text-sm font-bold text-slate-500 mt-6 tracking-tight">
                                 Already have an account?{" "}
                                 <button
                                     type="button"
@@ -161,13 +153,6 @@ export default function Register() {
                         </form>
                     )}
                 </div>
-            </div>
-
-            {/* Support Links */}
-            <div className="mt-8 flex gap-6 text-[11px] font-black uppercase tracking-widest text-slate-400">
-                <Link to="/about" className="hover:text-amber-500 transition-colors">Help Center</Link>
-                <Link to="/contact" className="hover:text-amber-500 transition-colors">Safety Info</Link>
-                <Link to="/" className="hover:text-amber-500 transition-colors">Back to Store</Link>
             </div>
         </div>
     );

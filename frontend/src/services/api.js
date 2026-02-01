@@ -56,3 +56,10 @@ export const authService = {
         return res.data;
     },
 }
+
+export const cartService = {
+    getCart: async () => {
+        const res = await api.get("/profile/cart");
+        return res.data;
+    },
+}

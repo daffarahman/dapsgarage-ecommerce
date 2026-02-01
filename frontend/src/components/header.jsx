@@ -53,10 +53,10 @@ export default function Header() {
     return (
         <header className="w-full font-sans border-b-4 border-slate-900">
             <div className="bg-[#fbbf24] text-slate-900 text-[10px] md:text-[11px] font-black py-2 px-4 border-b-2 border-slate-900/10 uppercase tracking-widest">
-                <div className="max-w-7xl mx-auto flex justify-between items-center">
+                <div className="max-w-7xl mx-auto flex justify-center items-center">
                     <div className="flex items-center gap-3">
                         <Truck size={14} strokeWidth={3} />
-                        <span>FREE SURAKARTA KOTA SHIPPING ON ORDERS OVER Rp100.000*</span>
+                        <span>FREE SURAKARTA KOTA SHIPPING ON ORDERS OVER Rp 200.000!!</span>
                     </div>
                 </div>
             </div>
@@ -99,8 +99,8 @@ export default function Header() {
                         <Link to="/profile" className="hidden sm:flex items-center gap-2 hover:text-red-600 transition-colors">
                             <User size={18} strokeWidth={3} /> {user ? user.full_name : "Account"}
                         </Link>
-                        <Link to="/checkout" className="flex items-center gap-3 bg-slate-900 text-[#f59e0b] px-6 py-2.5 border-2 border-slate-900 hover:bg-transparent hover:text-slate-900 transition-all font-black italic">
-                            <span className="hidden sm:inline">Checkout</span>
+                        <Link to="/cart" className="flex items-center gap-3 bg-slate-900 text-[#f59e0b] px-6 py-2.5 border-2 border-slate-900 hover:bg-transparent hover:text-slate-900 transition-all font-black italic">
+                            <span className="hidden sm:inline">My Cart</span>
                             <ShoppingCart size={20} strokeWidth={3} />
                         </Link>
                     </div>
@@ -213,8 +213,8 @@ export default function Header() {
                         </div>
 
                         <div className="p-8 bg-slate-900 border-t-4 border-slate-900">
-                            <Link to="/checkout" onClick={toggleSidebar} className="w-full flex justify-center items-center gap-4 bg-red-600 text-slate-900 py-5 font-black text-xl italic hover:bg-[#f59e0b] transition-all border-2 border-red-600">
-                                CHECKOUT <ShoppingCart size={24} strokeWidth={3} />
+                            <Link to="/cart" onClick={toggleSidebar} className="w-full flex justify-center items-center gap-4 bg-red-600 text-slate-900 py-5 font-black text-xl italic hover:bg-[#f59e0b] transition-all border-2 border-red-600">
+                                My Cart <ShoppingCart size={24} strokeWidth={3} />
                             </Link>
                         </div>
                     </div>

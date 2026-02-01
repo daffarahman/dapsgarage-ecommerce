@@ -10,6 +10,7 @@ import { AuthProvider } from "./context/AuthContext"
 import { ProtectedRoute, PublicRoute } from "./components/protected-route"
 import Profile from "./components/profile"
 import { About, Contact, Location, FAQs, Terms, Shipping, Reviews } from "./components/info-pages"
+import Cart from "./components/cart"
 
 function App() {
   return (
@@ -40,6 +41,12 @@ function App() {
             <Route path="/profile" element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/cart" element={
+              <ProtectedRoute>
+                <Cart />
               </ProtectedRoute>
             } />
 
