@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { productService, platformService } from "../services/api";
 import Loading from "./loading";
 import StarRating from "./star-rating";
@@ -60,21 +60,44 @@ export default function ProductPage() {
     const isOutOfStock = product.stock <= 0;
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8 md:py-12 md:px-8 font-sans">
+        <div className="max-w-7xl mx-auto px-4 py-6 md:py-10 md:px-8 font-sans">
+            {/* Breadcrumb */}
+            {platform && (
+                <div className="flex items-center gap-2 text-sm mb-6 font-medium">
+                    <Link to="/" className="text-gray-500 hover:text-[#00A3E0] transition-colors whitespace-nowrap">
+                        Home
+                    </Link>
+                    <span className="text-gray-400 font-bold px-1">/</span>
+                    <Link to={`/products/${platform.slug}`} className="text-gray-500 hover:text-[#00A3E0] transition-colors whitespace-nowrap">
+                        {platform.name}
+                    </Link>
+                    <span className="text-gray-400 font-bold px-1">/</span>
+                    <span className="text-gray-800 font-bold truncate">{product.title}</span>
+                </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
 
-                {/* Left Column: Image */}
-                <div className="flex justify-center relative">
-                    <div className="relative w-full max-w-lg">
+                {/* Left Column: Image Area */}
+                <div className="flex justify-center">
+                    <div className="relative w-full max-w-lg aspect-square md:aspect-auto md:h-[500px] bg-slate-50 flex items-center justify-center rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
                         <img
                             src={product.image_url}
                             alt={product.title}
-                            className={`w-full object-contain transition-all duration-500 ${isOutOfStock ? "grayscale opacity-60" : ""}`}
+                            className={`w-full h-full object-contain p-8 transition-all duration-500 ${isOutOfStock ? "grayscale opacity-60" : ""}`}
                         />
                         {isOutOfStock && (
                             <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
                                 <span className="bg-red-600 text-white text-xs md:text-sm font-black px-6 py-2.5 rounded-full uppercase tracking-widest shadow-xl border border-white/20 transform -rotate-12">
                                     Sold Out
+                                </span>
+                            </div>
+                        )}
+
+                        {!isOutOfStock && hasDiscount && (
+                            <div className="absolute top-4 left-4">
+                                <span className="bg-red-600 text-white text-sm md:text-base font-black px-4 py-2 rounded shadow-xl uppercase">
+                                    {product.discount}% OFF
                                 </span>
                             </div>
                         )}
@@ -162,6 +185,17 @@ export default function ProductPage() {
                         </div>
 
                     </div>
+                </div>
+            </div>
+
+            {/* Description Section */}
+            <div className="mt-16 border-t border-slate-200 pt-10">
+                <h2 className="text-2xl font-black uppercase text-slate-800 mb-6 flex items-center gap-2">
+                    <Info className="w-6 h-6 text-[#00A3E0]" />
+                    Product Description
+                </h2>
+                <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed text-lg">
+                    {product.description || "No description available for this product."}
                 </div>
             </div>
         </div>

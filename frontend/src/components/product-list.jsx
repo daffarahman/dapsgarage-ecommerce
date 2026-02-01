@@ -62,6 +62,8 @@ export default function ProductList() {
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 {products.map((product) => {
                     const isOutOfStock = product.stock <= 0;
+                    const hasDiscount = product.discount > 0;
+                    const salePrice = hasDiscount ? Math.round(product.price * (1 - product.discount / 100)) : product.price;
 
                     return (
                         <Link
@@ -73,11 +75,11 @@ export default function ProductList() {
                                 }`}
                         >
                             {/* Image Container */}
-                            <div className="relative aspect-square bg-slate-100 mt-4 overflow-hidden">
+                            <div className="relative aspect-square bg-slate-50 flex items-center justify-center mt-4 overflow-hidden">
                                 <img
                                     src={product.image_url || 'https://via.placeholder.com/300'}
                                     alt={product.title}
-                                    className={`w-full h-full object-cover transition-all duration-500 ${isOutOfStock ? "grayscale opacity-60" : "hover:scale-110"
+                                    className={`w-full h-full object-contain p-4 transition-all duration-500 ${isOutOfStock ? "grayscale opacity-60" : "hover:scale-110"
                                         }`}
                                 />
 
@@ -85,6 +87,14 @@ export default function ProductList() {
                                     <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
                                         <span className="bg-red-600 text-white text-[10px] md:text-xs font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-xl border border-white/20 transform -rotate-12">
                                             Sold Out
+                                        </span>
+                                    </div>
+                                )}
+
+                                {!isOutOfStock && hasDiscount && (
+                                    <div className="absolute top-2 left-2">
+                                        <span className="bg-red-600 text-white text-[10px] md:text-xs font-black px-2 py-1 rounded shadow-lg uppercase">
+                                            {product.discount}% OFF
                                         </span>
                                     </div>
                                 )}
@@ -103,11 +113,15 @@ export default function ProductList() {
                                         <p className="font-bold text-lg text-slate-400 italic">
                                             Out of stock
                                         </p>
-                                    ) : product.original_price ? (
-                                        <p className="text-sm">
-                                            From: <span className="line-through text-slate-500">{formatPrice(product.original_price)}</span>{' '}
-                                            <span className="font-bold text-lg text-green-600">{formatPrice(product.price)}</span>
-                                        </p>
+                                    ) : hasDiscount ? (
+                                        <div className="flex flex-col">
+                                            <span className="text-xs text-slate-500 line-through">
+                                                {formatPrice(product.price)}
+                                            </span>
+                                            <span className="font-bold text-xl text-red-600">
+                                                {formatPrice(salePrice)}
+                                            </span>
+                                        </div>
                                     ) : (
                                         <p className="font-bold text-xl text-[#f59e0b]">
                                             {formatPrice(product.price)}
