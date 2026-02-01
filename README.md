@@ -1,5 +1,8 @@
 # DapsGarage E-Commerce
 
+> [!IMPORTANT]
+> This project is still **under development** and is intended for **learning purposes**.
+
 A modern e-commerce platform built with React, Node.js, and Supabase.
 ![alt text](img/repo-img.png)
 
