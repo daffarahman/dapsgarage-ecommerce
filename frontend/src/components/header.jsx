@@ -9,7 +9,6 @@ import {
     X,
     ChevronDown,
     ChevronRight,
-    CircleDollarSign,
     Gamepad2,
     Info,
     Mail,
@@ -98,9 +97,6 @@ export default function Header() {
                         </Link>
                         <Link to="/about" className="hover:text-black transition-colors flex items-center gap-1.5">
                             <Info size={14} /> About Us
-                        </Link>
-                        <Link to="/trade" className="hover:text-black transition-colors flex items-center gap-1.5">
-                            <CircleDollarSign size={14} /> Sell Video Games
                         </Link>
                     </div>
 
@@ -213,9 +209,6 @@ export default function Header() {
 
                             {/* Mobile Extra Links */}
                             <div className="p-5 space-y-4 font-black">
-                                <Link to="/trade" onClick={toggleSidebar} className="flex items-center gap-3 text-slate-800 hover:text-[#f59e0b]">
-                                    <CircleDollarSign size={18} /> Trade / Sell
-                                </Link>
                                 <Link to="/account" onClick={toggleSidebar} className="flex items-center gap-3 text-slate-800 hover:text-[#f59e0b]">
                                     <User size={18} /> My Account
                                 </Link>

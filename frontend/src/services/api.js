@@ -11,11 +11,19 @@ export const platformService = {
         const res = await api.get("/platforms");
         return res.data;
     },
+    getById: async (id) => {
+        const res = await api.get(`/platforms/${id}`);
+        return res.data;
+    },
 }
 
 export const productService = {
     getByPlatform: async (slug) => {
         const res = await api.get(`/products?platform=${slug}`);
+        return res.data;
+    },
+    getById: async (id) => {
+        const res = await api.get(`/products/${id}`);
         return res.data;
     },
 }

@@ -8,7 +8,6 @@ export default function Footer() {
                     <h4 className="font-bold text-xl uppercase mb-4 underline decoration-slate-900 underline-offset-8 decoration-4">Dap's Garage</h4>
                     <ul className="space-y-2 text-sm">
                         <li>About Us</li>
-                        <li>Sell Video Games</li>
                         <li>Repair Center</li>
                         <li>Deals and Coupons</li>
                         <li>Rewards</li>

@@ -10,12 +10,28 @@ app.use(cors());
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 app.get("/", (req, res) => {
-    res.send("Hello World!");
+    res.json({ message: "Welcome to DapsGarage E-Commerce API" });
 });
 
 app.get("/api/platforms", async (req, res) => {
     try {
         const { data, error } = await supabase.from("platforms").select("*");
+
+        if (error) {
+            throw error;
+        }
+
+        res.json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get("/api/platforms/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { data, error } = await supabase.from("platforms").select("*").eq("id", id).single();
 
         if (error) {
             throw error;
@@ -69,6 +85,22 @@ app.get("/api/products", async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
+
+app.get("/api/products/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { data, error } = await supabase.from("products").select("*").eq("id", id).single();
+
+        if (error) {
+            throw error;
+        }
+
+        res.json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
 
 app.listen(process.env.PORT, () => {
     console.log(`Server running on port ${process.env.PORT}`);

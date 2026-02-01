@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { productService } from "../services/api";
 import StarRating from "./star-rating";
+import Loading from "./loading";
 
 export default function ProductList() {
 
@@ -37,13 +38,7 @@ export default function ProductList() {
     }, [slug]); // refresh whenever the slug changes
 
     if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-[60vh]">
-                <div className="text-lg font-semibold text-slate-600">
-                    Loading products...
-                </div>
-            </div>
-        );
+        return <Loading />;
     }
 
     if (products.length === 0) {
@@ -69,11 +64,12 @@ export default function ProductList() {
                     const isOutOfStock = product.stock <= 0;
 
                     return (
-                        <div
+                        <Link
+                            to={`/product/${product.id}`}
                             key={product.id}
                             className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-300 bg-white hover:shadow-lg ${isOutOfStock
-                                    ? "border-slate-200"
-                                    : "border-yellow-500"
+                                ? "border-slate-200"
+                                : "border-yellow-500"
                                 }`}
                         >
                             {/* Image Container */}
@@ -124,7 +120,7 @@ export default function ProductList() {
                                     <StarRating rating={product.rating || 5} reviews={0} />
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     );
                 })}
             </div>
