@@ -1,6 +1,7 @@
 # DapsGarage E-Commerce
 
 A modern e-commerce platform built with React, Node.js, and Supabase.
+![alt text](img/repo-img.png)
 
 ## 🚀 Project Overview
 
