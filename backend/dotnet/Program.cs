@@ -22,7 +22,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/categories", async (AppDbContext db) =>
+var api = app.MapGroup("/api");
+
+api.MapGet("/categories", async (AppDbContext db) =>
 {
     var categories = await (
         from c in db.Categories
@@ -38,8 +40,11 @@ app.MapGet("/categories", async (AppDbContext db) =>
 })
 .WithName("GetCategories");
 
-app.MapGet("/products", async (AppDbContext db) =>
+api.MapGet("/products", async (AppDbContext db, int offset = 0, int limit = 10) =>
 {
+    offset = Math.Max(offset, 0);
+    limit = Math.Clamp(limit, 1, 100);
+
     var products = await (
         from p in db.Products
         join c in db.Categories on p.CategoryId equals c.Id into categoryJoin
@@ -63,7 +68,10 @@ app.MapGet("/products", async (AppDbContext db) =>
                     c.Slug
                 }
         }
-    ).ToListAsync();
+    )
+    .Skip(offset)
+    .Take(limit)
+    .ToListAsync();
 
     return Results.Ok(products);
 })
