@@ -40,35 +40,47 @@ api.MapGet("/categories", async (AppDbContext db) =>
 })
 .WithName("GetCategories");
 
-api.MapGet("/products", async (AppDbContext db, int offset = 0, int limit = 10) =>
+api.MapGet("/products", async (AppDbContext db, int offset = 0, int limit = 10, bool? in_stock = null, string? slug = null) =>
 {
     offset = Math.Max(offset, 0);
     limit = Math.Clamp(limit, 1, 100);
 
-    var products = await (
+    var productsQuery =
         from p in db.Products
         join c in db.Categories on p.CategoryId equals c.Id into categoryJoin
         from c in categoryJoin.DefaultIfEmpty()
-        select new
+        select new { Product = p, Category = c };
+
+    if (in_stock.HasValue)
+    {
+        productsQuery = productsQuery.Where(item => in_stock.Value ? item.Product.Stock > 0 : item.Product.Stock <= 0);
+    }
+
+    if (!string.IsNullOrWhiteSpace(slug))
+    {
+        productsQuery = productsQuery.Where(item => item.Category != null && item.Category.Slug == slug);
+    }
+
+    var products = await productsQuery
+        .Select(item => new
         {
-            p.Id,
-            p.Title,
-            p.Description,
-            p.Year,
-            p.ImageUrl,
-            p.Price,
-            p.Stock,
-            p.Discount,
-            Category = c == null
+            item.Product.Id,
+            item.Product.Title,
+            item.Product.Description,
+            item.Product.Year,
+            item.Product.ImageUrl,
+            item.Product.Price,
+            item.Product.Stock,
+            item.Product.Discount,
+            Category = item.Category == null
                 ? null
                 : new
                 {
-                    c.Id,
-                    c.Name,
-                    c.Slug
+                    item.Category.Id,
+                    item.Category.Name,
+                    item.Category.Slug
                 }
-        }
-    )
+        })
     .Skip(offset)
     .Take(limit)
     .ToListAsync();
