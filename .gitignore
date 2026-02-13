@@ -1,0 +1,18 @@
+# Root-level OS / Editor
+.DS_Store
+Thumbs.db
+
+.vscode/*
+!.vscode/extensions.json
+
+*.tmp
+
+# Root-level logs
+logs/
+*.log
+
+# Root-level local env files
+.env
+.env.*
+!.env.example
+
