@@ -24,14 +24,47 @@ app.UseHttpsRedirection();
 
 app.MapGet("/categories", async (AppDbContext db) =>
 {
-    var categories = await db.Categories.ToListAsync();
+    var categories = await (
+        from c in db.Categories
+        select new
+        {
+            c.Id,
+            c.Name,
+            c.Slug
+        }
+    ).ToListAsync();
+
     return Results.Ok(categories);
 })
 .WithName("GetCategories");
 
 app.MapGet("/products", async (AppDbContext db) =>
 {
-    var products = await db.Products.ToListAsync();
+    var products = await (
+        from p in db.Products
+        join c in db.Categories on p.CategoryId equals c.Id into categoryJoin
+        from c in categoryJoin.DefaultIfEmpty()
+        select new
+        {
+            p.Id,
+            p.Title,
+            p.Description,
+            p.Year,
+            p.ImageUrl,
+            p.Price,
+            p.Stock,
+            p.Discount,
+            Category = c == null
+                ? null
+                : new
+                {
+                    c.Id,
+                    c.Name,
+                    c.Slug
+                }
+        }
+    ).ToListAsync();
+
     return Results.Ok(products);
 })
 .WithName("GetProducts");
