@@ -89,4 +89,36 @@ api.MapGet("/products", async (AppDbContext db, int offset = 0, int limit = 10, 
 })
 .WithName("GetProducts");
 
+api.MapGet("/products/{id:guid}", async (AppDbContext db, Guid id) =>
+{
+    var product = await (
+        from p in db.Products
+        join c in db.Categories on p.CategoryId equals c.Id into categoryJoin
+        from c in categoryJoin.DefaultIfEmpty()
+        where p.Id == id
+        select new
+        {
+            p.Id,
+            p.Title,
+            p.Description,
+            p.Year,
+            p.ImageUrl,
+            p.Price,
+            p.Stock,
+            p.Discount,
+            Category = c == null
+                ? null
+                : new
+                {
+                    c.Id,
+                    c.Name,
+                    c.Slug
+                }
+        }
+    ).FirstOrDefaultAsync();
+
+    return product is null ? Results.NotFound() : Results.Ok(product);
+})
+.WithName("GetProductById");
+
 app.Run();
