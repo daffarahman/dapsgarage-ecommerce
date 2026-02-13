@@ -4,9 +4,42 @@ using GarageApi.Data;
 DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
+const string corsPolicyName = "FrontendOrigins";
 
 // Add services to the container.
 builder.Services.AddOpenApi();
+
+var configuredCorsOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>() ?? [];
+
+var corsOriginsFromEnv = Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS");
+if (!string.IsNullOrWhiteSpace(corsOriginsFromEnv))
+{
+    configuredCorsOrigins = configuredCorsOrigins
+        .Concat(corsOriginsFromEnv.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+        .ToArray();
+}
+
+configuredCorsOrigins = configuredCorsOrigins
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToArray();
+
+if (configuredCorsOrigins.Length == 0)
+{
+    throw new InvalidOperationException("No CORS origins configured. Set Cors:AllowedOrigins or CORS_ALLOWED_ORIGINS.");
+}
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsPolicyName, policy =>
+    {
+        policy
+            .WithOrigins(configuredCorsOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -21,6 +54,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(corsPolicyName);
 
 var api = app.MapGroup("/api");
 
