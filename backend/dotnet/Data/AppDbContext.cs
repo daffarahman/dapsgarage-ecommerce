@@ -5,6 +5,7 @@ namespace GarageApi.Data;
 
 public class AppDbContext : DbContext
 {
+    // Constructor
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<Category> Categories { get; set; }
@@ -22,7 +23,8 @@ public class AppDbContext : DbContext
             entity.Property(e => e.CreatedAt).HasColumnName("created_at");
         });
 
-        modelBuilder.Entity<Product>(entity => {
+        modelBuilder.Entity<Product>(entity =>
+        {
             entity.ToTable("product");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).HasColumnName("id");

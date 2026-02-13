@@ -1,6 +1,27 @@
 @GarageApi_HostAddress = http://localhost:5117
+@ProductId = 00000000-0000-0000-0000-000000000000
 
-GET {{GarageApi_HostAddress}}/weatherforecast/
+GET {{GarageApi_HostAddress}}/api/categories
+Accept: application/json
+
+###
+
+GET {{GarageApi_HostAddress}}/api/products?offset=0&limit=10
+Accept: application/json
+
+###
+
+GET {{GarageApi_HostAddress}}/api/products?offset=0&limit=10&in_stock=true
+Accept: application/json
+
+###
+
+GET {{GarageApi_HostAddress}}/api/products?offset=0&limit=10&slug=engine-parts
+Accept: application/json
+
+###
+
+GET {{GarageApi_HostAddress}}/api/products/{{ProductId}}
 Accept: application/json
 
 ###

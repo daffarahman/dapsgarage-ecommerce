@@ -9,6 +9,7 @@ const string corsPolicyName = "FrontendOrigins";
 // Add services to the container.
 builder.Services.AddOpenApi();
 
+// Configure CORS origins
 var configuredCorsOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")
     .Get<string[]>() ?? [];
@@ -41,6 +42,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Configure Database
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
