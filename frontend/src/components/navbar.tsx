@@ -189,8 +189,8 @@ export default function Navbar() {
                     categories.map((category) => (
                       <Link
                         key={category.id}
-                        to={`/${category.slug}`}
-                        className="flex items-center gap-2 text-sm transition-colors hover:text-primary"
+                        to={`/shop-all?category=${category.slug}`}
+                        className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <ToyBrick className="h-4 w-4" />
@@ -202,21 +202,21 @@ export default function Navbar() {
               </div>
               <Link
                 to="/shop-all"
-                className="text-sm font-medium transition-colors hover:text-primary"
+                className="rounded-md px-2 py-1.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Shop All
               </Link>
               <Link
                 to="/deals"
-                className="text-sm font-medium transition-colors hover:text-primary"
+                className="rounded-md px-2 py-1.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Deals
               </Link>
               <Link
                 to="/about"
-                className="text-sm font-medium transition-colors hover:text-primary"
+                className="rounded-md px-2 py-1.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About

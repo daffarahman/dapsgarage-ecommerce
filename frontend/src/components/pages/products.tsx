@@ -122,13 +122,28 @@ export default function ProductsPage() {
 
       {!isLoading && !errorMessage && hasProducts && (
         <ul className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
-          {products.map((product) => {
+          {products.map((product, index) => {
             const discountPercent = normalizeDiscountPercent(product.discount);
             const hasDiscount = discountPercent > 0;
             const discountedPrice = product.price * (1 - discountPercent / 100);
+            const isSingleItemInLastRowOnTwoCol =
+              products.length % 2 === 1 && index === products.length - 1;
+            const isSingleItemInLastRowOnThreeCol =
+              products.length % 3 === 1 && index === products.length - 1;
 
             return (
-              <li key={product.id} className="min-w-0">
+              <li
+                key={product.id}
+                className={`min-w-0 ${
+                  isSingleItemInLastRowOnTwoCol
+                    ? "col-span-2 mx-auto w-full max-w-[calc(50%-0.5rem)]"
+                    : ""
+                } ${
+                  isSingleItemInLastRowOnThreeCol
+                    ? "md:col-span-3 md:mx-auto md:w-full md:max-w-[calc(33.333%-0.75rem)] xl:col-span-1 xl:max-w-none"
+                    : ""
+                }`}
+              >
                 <Card className="flex h-full w-full flex-col gap-0 overflow-hidden py-0">
                   <div className="relative w-full overflow-hidden bg-muted">
                     <div className="aspect-square w-full">
