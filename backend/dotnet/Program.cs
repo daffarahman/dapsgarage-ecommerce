@@ -76,7 +76,30 @@ api.MapGet("/categories", async (AppDbContext db) =>
 })
 .WithName("GetCategories");
 
-api.MapGet("/products", async (AppDbContext db, int offset = 0, int limit = 10, bool? in_stock = null, string? slug = null) =>
+api.MapGet("/categories/{slug}", async (AppDbContext db, string slug) =>
+{
+    var category = await (
+        from c in db.Categories
+        where c.Slug == slug
+        select new
+        {
+            c.Id,
+            c.Name,
+            c.Slug
+        }
+    ).FirstOrDefaultAsync();
+
+    return category is null ? Results.NotFound() : Results.Ok(category);
+})
+.WithName("GetCategoryBySlug");
+
+api.MapGet("/products", async (
+    AppDbContext db,
+    int offset = 0,
+    int limit = 10,
+    bool? in_stock = null,
+    string? category = null
+) =>
 {
     offset = Math.Max(offset, 0);
     limit = Math.Clamp(limit, 1, 100);
@@ -92,9 +115,9 @@ api.MapGet("/products", async (AppDbContext db, int offset = 0, int limit = 10, 
         productsQuery = productsQuery.Where(item => in_stock.Value ? item.Product.Stock > 0 : item.Product.Stock <= 0);
     }
 
-    if (!string.IsNullOrWhiteSpace(slug))
+    if (!string.IsNullOrWhiteSpace(category))
     {
-        productsQuery = productsQuery.Where(item => item.Category != null && item.Category.Slug == slug);
+        productsQuery = productsQuery.Where(item => item.Category != null && item.Category.Slug == category);
     }
 
     var products = await productsQuery
@@ -102,6 +125,7 @@ api.MapGet("/products", async (AppDbContext db, int offset = 0, int limit = 10, 
         {
             item.Product.Id,
             item.Product.Title,
+            item.Product.Slug,
             item.Product.Description,
             item.Product.Year,
             item.Product.ImageUrl,
@@ -125,17 +149,18 @@ api.MapGet("/products", async (AppDbContext db, int offset = 0, int limit = 10, 
 })
 .WithName("GetProducts");
 
-api.MapGet("/products/{id:guid}", async (AppDbContext db, Guid id) =>
+api.MapGet("/products/{slug}", async (AppDbContext db, string slug) =>
 {
     var product = await (
         from p in db.Products
         join c in db.Categories on p.CategoryId equals c.Id into categoryJoin
         from c in categoryJoin.DefaultIfEmpty()
-        where p.Id == id
+        where p.Slug == slug
         select new
         {
             p.Id,
             p.Title,
+            p.Slug,
             p.Description,
             p.Year,
             p.ImageUrl,
@@ -155,6 +180,6 @@ api.MapGet("/products/{id:guid}", async (AppDbContext db, Guid id) =>
 
     return product is null ? Results.NotFound() : Results.Ok(product);
 })
-.WithName("GetProductById");
+.WithName("GetProductBySlug");
 
 app.Run();

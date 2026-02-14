@@ -4,6 +4,7 @@ public class Product
 {
     public required Guid Id { get; set; }
     public required string Title { get; set; }
+    public required string Slug { get; set; }
     public string Description { get; set; } = string.Empty;
     public required Guid CategoryId { get; set; }
     public int Year { get; set; }

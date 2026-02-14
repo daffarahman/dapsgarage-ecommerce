@@ -29,6 +29,7 @@ public class AppDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Title).HasColumnName("title");
+            entity.Property(e => e.Slug).HasColumnName("slug");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.Year).HasColumnName("year");
