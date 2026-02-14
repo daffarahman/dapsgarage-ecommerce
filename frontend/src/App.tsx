@@ -11,7 +11,7 @@ function App() {
       <main className="min-h-screen container mx-auto p-4">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/shop-all" element={<ProductsPage />} />
         </Routes>
       </main>
     </ThemeProvider>

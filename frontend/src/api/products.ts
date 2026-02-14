@@ -5,7 +5,7 @@ export type GetProductsParams = {
     offset?: number;
     limit?: number;
     inStock?: boolean;
-    slug?: string;
+    category?: string;
     signal?: AbortSignal;
 };
 
@@ -17,30 +17,15 @@ export const productsApi = {
                 offset: params?.offset,
                 limit: params?.limit,
                 in_stock: params?.inStock,
-                slug: params?.slug,
+                category: params?.category,
             },
         });
 
         return response.data;
     },
 
-    getById: async (id: string): Promise<Product> => {
-        const response = await apiClient.get<Product>(`products/${id}`);
+    getBySlug: async (slug: string): Promise<Product> => {
+        const response = await apiClient.get<Product>(`products/${slug}`);
         return response.data;
     },
-
-    getByCategorySlug: async (
-        slug: string,
-        params?: Omit<GetProductsParams, "slug">
-    ): Promise<Product[]> => {
-        return productsApi.getAll({ ...params, slug });
-    },
 };
-
-export async function getProducts(params?: GetProductsParams): Promise<Product[]> {
-    return productsApi.getAll(params);
-}
-
-export async function getProductById(id: string): Promise<Product> {
-    return productsApi.getById(id);
-}
